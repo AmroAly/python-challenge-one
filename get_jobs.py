@@ -43,10 +43,15 @@ def get_job_details(username, password):
             ))
 
 def main():
-    username = input('Your username: ')
-    password = input('Your password: ')
+    username = input('Your Jenkins account username: ')
+    password = input('Your Jenkins account password: ')
     if username and password:
-        get_job_details(username, password)
+        try:
+            print('Fetching your Jenkins jobs....')
+            get_job_details(username, password)
+        except Exception:
+            print("Invalid username or password. Please Check your credentails and try again.")
+
     conn.commit()
     conn.close()
 

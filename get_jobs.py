@@ -4,6 +4,7 @@ from jenkinsapi.jenkins import Jenkins
 from datetime import datetime
 import sqlite3
 from sqlite3 import Error
+    
 
 """Create the database"""
 conn = sqlite3.connect('jobs.db')
@@ -18,15 +19,15 @@ c.execute("""CREATE TABLE if not exists jobs (
 
 
 """Get instence of Jenkins server"""
-def get_server_instance():
+def get_server_instance(username, password):
     jenkins_url = 'http://jenkins_host:8080' # I don't know the exact url
     server = Jenkins(jenkins_url, username='foouser', password='foopassword')
     return server
 
 
 """Get job details of each job that is running on the Jenkins instance"""
-def get_job_details():
-    server = get_server_instance()
+def get_job_details(username, password):
+    server = get_server_instance(username, password)
     for job_name, job_instance in server.get_jobs():
         print('Job Name:%s' % (job_instance.name))
         print ('Job Description:%s' % (job_instance.get_description()))
@@ -42,7 +43,10 @@ def get_job_details():
             ))
 
 def main():
-    get_job_details()
+    username = input('Your username: ')
+    password = input('Your password: ')
+    if username and password:
+        get_job_details(username, password)
     conn.commit()
     conn.close()
 
